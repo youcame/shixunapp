@@ -1,6 +1,5 @@
-import Footer from '@/components/Footer';
-import { login } from '@/services/ant-design-pro/api';
 import { getFakeCaptcha } from '@/services/ant-design-pro/login';
+import Footer from '@/components/Footer';
 import {
   AlipayCircleOutlined,
   LockOutlined,
@@ -16,11 +15,12 @@ import {
   ProFormText,
 } from '@ant-design/pro-components';
 import { useEmotionCss } from '@ant-design/use-emotion-css';
-import { Helmet, history, useModel } from '@umijs/max';
+import { history, useModel, Helmet } from '@umijs/max';
 import { Alert, message, Tabs } from 'antd';
+import Settings from '../../../../config/defaultSettings';
 import React, { useState } from 'react';
 import { flushSync } from 'react-dom';
-import Settings from '../../../../config/defaultSettings';
+import {getLoginUserUsingGET, userLoginUsingPOST} from '@/services/shixunapp/userController';
 const ActionIcons = () => {
   const langClassName = useEmotionCss(({ token }) => {
     return {
@@ -89,7 +89,7 @@ const Login: React.FC = () => {
     };
   });
   const fetchUserInfo = async () => {
-    const userInfo = await initialState?.fetchUserInfo?.();
+    const userInfo = await getLoginUserUsingGET();
     if (userInfo) {
       flushSync(() => {
         setInitialState((s) => ({
@@ -99,24 +99,24 @@ const Login: React.FC = () => {
       });
     }
   };
-  const handleSubmit = async (values: API.LoginParams) => {
+  const handleSubmit = async (values: API.UserLoginRequest) => {
     try {
       // 登录
-      const msg = await login({
+      const res = await userLoginUsingPOST({
         ...values,
-        type,
       });
-      if (msg.status === 'ok') {
+      if (res.data) {
         const defaultLoginSuccessMessage = '登录成功！';
+        setInitialState({
+          loginUser: res.data,
+        });
         message.success(defaultLoginSuccessMessage);
-        await fetchUserInfo();
         const urlParams = new URL(window.location.href).searchParams;
-        history.push(urlParams.get('redirect') || '/');
+        history.push(urlParams.get('redirect') || '/welcome');
         return;
       }
-      console.log(msg);
+      console.log(res);
       // 如果失败去设置用户错误信息
-      setUserLoginState(msg);
     } catch (error) {
       const defaultLoginFailureMessage = '登录失败，请重试！';
       console.log(error);
@@ -128,7 +128,7 @@ const Login: React.FC = () => {
     <div className={containerClassName}>
       <Helmet>
         <title>
-          {'登录'}- {Settings.title}
+          {'登录页'}- {Settings.title}
         </title>
       </Helmet>
       <Lang />
@@ -145,13 +145,13 @@ const Login: React.FC = () => {
           }}
           logo={<img alt="logo" src="/logo.svg" />}
           title="Ant Design"
-          subTitle={'Ant Design 是西湖区最具影响力的 Web 设计规范'}
+          subTitle={'pages.layouts.userLayout.title'}
           initialValues={{
             autoLogin: true,
           }}
-          actions={['其他登录方式 :', <ActionIcons key="icons" />]}
+          actions={['其他登录方式', <ActionIcons key="icons" />]}
           onFinish={async (values) => {
-            await handleSubmit(values as API.LoginParams);
+            await handleSubmit(values as API.UserLoginRequest);
           }}
         >
           <Tabs
@@ -171,12 +171,12 @@ const Login: React.FC = () => {
           />
 
           {status === 'error' && loginType === 'account' && (
-            <LoginMessage content={'错误的用户名和密码(admin/ant.design)'} />
+            <LoginMessage content={'账户或密码错误(admin/ant.design)'} />
           )}
           {type === 'account' && (
             <>
               <ProFormText
-                name="username"
+                name="userAccount"
                 fieldProps={{
                   size: 'large',
                   prefix: <UserOutlined />,
@@ -185,12 +185,12 @@ const Login: React.FC = () => {
                 rules={[
                   {
                     required: true,
-                    message: '用户名是必填项！',
+                    message: '请输入用户名!',
                   },
                 ]}
               />
               <ProFormText.Password
-                name="password"
+                name="userPassword"
                 fieldProps={{
                   size: 'large',
                   prefix: <LockOutlined />,
@@ -199,7 +199,7 @@ const Login: React.FC = () => {
                 rules={[
                   {
                     required: true,
-                    message: '密码是必填项！',
+                    message: '请输入密码！',
                   },
                 ]}
               />
@@ -215,15 +215,15 @@ const Login: React.FC = () => {
                   prefix: <MobileOutlined />,
                 }}
                 name="mobile"
-                placeholder={'请输入手机号！'}
+                placeholder={'手机号'}
                 rules={[
                   {
                     required: true,
-                    message: '手机号是必填项！',
+                    message: '请输入手机号！',
                   },
                   {
                     pattern: /^1\d{10}$/,
-                    message: '不合法的手机号！',
+                    message: '手机号格式错误！',
                   },
                 ]}
               />
@@ -235,10 +235,10 @@ const Login: React.FC = () => {
                 captchaProps={{
                   size: 'large',
                 }}
-                placeholder={'请输入验证码！'}
+                placeholder={'请输入验证码'}
                 captchaTextRender={(timing, count) => {
                   if (timing) {
-                    return `${count} ${'秒后重新获取'}`;
+                    return `${count} ${'获取验证码'}`;
                   }
                   return '获取验证码';
                 }}
@@ -246,7 +246,7 @@ const Login: React.FC = () => {
                 rules={[
                   {
                     required: true,
-                    message: '验证码是必填项！',
+                    message: '请输入验证码！',
                   },
                 ]}
                 onGetCaptcha={async (phone) => {
@@ -274,7 +274,7 @@ const Login: React.FC = () => {
                 float: 'right',
               }}
             >
-              忘记密码 ?
+              忘记密码
             </a>
           </div>
         </LoginForm>

@@ -33,6 +33,9 @@ declare namespace API {
     current?: number;
     pageSize?: number;
   };
+  type UserRole = {
+    userRole: string;
+  }
 
   type RuleListItem = {
     key?: number;
