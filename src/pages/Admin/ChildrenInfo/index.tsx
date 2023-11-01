@@ -55,10 +55,14 @@ const TableList: React.FC = () => {
 
   const handleTaskAdd = async (fields: API.TaskVO) => {
     const hide = message.loading('正在添加任务');
+    if(!currentRow){
+      return;
+    }
+    console.log(currentRow.id);
     try {
       await addTaskUsingPOST({
         ...fields,
-        finishUserId: fields.id,
+        finishUserId: currentRow.id,
         types: 0,
         createUserId: initialState?.loginUser?.id,
       });
@@ -251,7 +255,7 @@ const TableList: React.FC = () => {
         <Button
           color={"blue"}
           type={"link"}
-          key="detail"
+          key="task"
           onClick={() => {
             // @ts-ignore
             handleTaskModalOpen(true);

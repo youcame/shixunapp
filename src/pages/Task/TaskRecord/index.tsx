@@ -4,9 +4,10 @@ import {
 import '@umijs/max';
 import {useEffect, useState} from "react";
 import {useLocation} from "umi";
-import {Avatar, Card, Divider, List, Typography} from "antd";
-import {getTaskByIdUsingGET} from "@/services/shixunapp/taskController";
+import {Avatar, Button, Card, Divider, List, message, Typography} from "antd";
+import {deleteTaskUsingPOST, getTaskByIdUsingGET} from "@/services/shixunapp/taskController";
 import {formatDate} from "../../../../utils/timeUtil";
+import {deleteUserUsingPOST} from "@/services/shixunapp/userController";
 
 const TableList: React.FC = () => {
   const [formValue,setFormValue] = useState<API.TaskVO[]>();
@@ -20,6 +21,24 @@ const TableList: React.FC = () => {
     });
     setFormValue(res?.data);
   }
+
+  const handleRemove = async (id: number) => {
+    const hide = message.loading('正在删除');
+    if (!id) return true;
+    try {
+      const res = await deleteTaskUsingPOST({
+        id: id,
+      });
+      await getTaskInfo();
+      hide();
+      message.success('删除成功');
+      return true;
+    } catch (error: any) {
+      hide();
+      message.error("删除失败",error?.message);
+      return false;
+    }
+  };
 
   useEffect(()=>{
     getTaskInfo();
@@ -43,6 +62,21 @@ const TableList: React.FC = () => {
                   description={`在${formatDate(item?.createTime)}时收到了任务:${item?.content}`}
                 />
               </List.Item>
+              <div>
+                <Button type={"link"} key={"finish"} >
+                  完成
+                </Button>
+                <Button
+                    type={"text"}
+                    key={"delete"}
+                    danger
+                    onClick={()=> {
+                    handleRemove(item?.id)
+                  }}
+                >
+                  放弃
+                </Button>
+              </div>
             </>
           ):null}
         />

@@ -17,7 +17,7 @@ import {
   updateUserUsingPOST,
 } from "@/services/shixunapp/userController";
 import {addTaskUsingPOST} from "@/services/shixunapp/taskController";
-import {useModel} from "@@/exports";
+import {history, useModel} from "@@/exports";
 
 const TableList: React.FC = () => {
 
@@ -56,10 +56,14 @@ const TableList: React.FC = () => {
 
   const handleTaskAdd = async (fields: API.TaskVO) => {
     const hide = message.loading('正在添加任务');
+    if(!currentRow){
+      return;
+    }
+    console.log(currentRow.id);
     try {
       await addTaskUsingPOST({
         ...fields,
-        finishUserId: fields.id,
+        finishUserId: currentRow.id,
         types: 1,
         createUserId: initialState?.loginUser?.id,
       });
@@ -253,9 +257,10 @@ const TableList: React.FC = () => {
         <Button
           color={"blue"}
           type={"link"}
-          key="detail"
+          key="task"
           onClick={() => {
             // @ts-ignore
+            setCurrentRow(record);
             handleTaskModalOpen(true);
           }}
         >
