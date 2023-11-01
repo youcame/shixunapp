@@ -62,6 +62,14 @@ export async function getUserDonateByIdUsingGET(
   });
 }
 
+/** getStatistic GET /api/userDonate/get/statistic */
+export async function getStatisticUsingGET(options?: { [key: string]: any }) {
+  return request<API.BaseResponseStatisticVO_>('/api/userDonate/get/statistic', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
 /** updateUserDonate POST /api/userDonate/update */
 export async function updateUserDonateUsingPOST(
   body: API.UserDonateVO,

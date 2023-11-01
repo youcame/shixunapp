@@ -1,102 +1,124 @@
 import { PageContainer } from '@ant-design/pro-components';
-import { useModel } from '@umijs/max';
-import { Card, theme } from 'antd';
-import React from 'react';
+import {Card, Col, Divider, message, Row, theme, Typography} from 'antd';
+import React, {useEffect, useState} from 'react';
+import {getStatisticUsingGET} from "@/services/shixunapp/userDonateController";
+import {G2, Pie} from '@ant-design/plots';
+import {animated, useSpring} from "react-spring";
 
-/**
- * 每个单独的卡片，为了复用样式抽成了组件
- * @param param0
- * @returns
- */
-const InfoCard: React.FC<{
-  title: string;
-  index: number;
-  desc: string;
-  href: string;
-}> = ({ title, href, index, desc }) => {
-  const { useToken } = theme;
-
-  const { token } = useToken();
-
-  return (
-    <div
-      style={{
-        backgroundColor: token.colorBgContainer,
-        boxShadow: token.boxShadow,
-        borderRadius: '8px',
-        fontSize: '14px',
-        color: token.colorTextSecondary,
-        lineHeight: '22px',
-        padding: '16px 19px',
-        minWidth: '220px',
-        flex: 1,
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          gap: '4px',
-          alignItems: 'center',
-        }}
-      >
-        <div
-          style={{
-            width: 48,
-            height: 48,
-            lineHeight: '22px',
-            backgroundSize: '100%',
-            textAlign: 'center',
-            padding: '8px 16px 16px 12px',
-            color: '#FFF',
-            fontWeight: 'bold',
-            backgroundImage:
-              "url('https://gw.alipayobjects.com/zos/bmw-prod/daaf8d50-8e6d-4251-905d-676a24ddfa12.svg')",
-          }}
-        >
-          {index}
-        </div>
-        <div
-          style={{
-            fontSize: '16px',
-            color: token.colorText,
-            paddingBottom: 8,
-          }}
-        >
-          {title}
-        </div>
-      </div>
-      <div
-        style={{
-          fontSize: '14px',
-          color: token.colorTextSecondary,
-          textAlign: 'justify',
-          lineHeight: '22px',
-          marginBottom: 8,
-        }}
-      >
-        {desc}
-      </div>
-      <a href={href} target="_blank" rel="noreferrer">
-        了解更多 {'>'}
-      </a>
-    </div>
-  );
+const AnimatedNumber = ({ value }) => {
+  const { number } = useSpring({
+    from: { number: 0 },
+    to: { number: value },
+    config: { duration: 1000 }, // 调整动画持续时间
+  });
+  const roundedNumber = number.interpolate((val) => val.toFixed(2));
+  return <animated.span style={{fontSize: '120px',color: 'orange'}}>{roundedNumber}</animated.span>;
 };
 
 const Welcome: React.FC = () => {
   const { token } = theme.useToken();
-  const { initialState } = useModel('@@initialState');
+
+  const [statistic,setStatistic] = useState<API.StatisticVO>()
+
+  const getStatisticInfo = async ()=>{
+    const hide = message.loading('正在查找统计数据');
+    try {
+      const res = await getStatisticUsingGET();
+      setStatistic(res?.data)
+      hide();
+      //message.success('查找成功');
+      return true;
+    } catch (error: any) {
+      hide();
+      message.error("查找失败",error?.message);
+      return false;
+    }
+  }
+  useEffect(()=>{
+    getStatisticInfo();
+  },[])
+
+
+  const DemoPie = () => {
+    const G = G2.getEngine('canvas');
+    const data = [
+      {
+        type: '志愿者',
+        value: statistic?.volunteerNum || 0,
+      },
+      {
+        type: '儿童',
+        value: statistic?.childrenNum||0,
+      },
+      {
+        type: '捐助者',
+        value: statistic?.donatorNum||0,
+      },
+    ];
+    const cfg = {
+      appendPadding: 10,
+      data,
+      angleField: 'value',
+      colorField: 'type',
+      radius: 0.75,
+      legend: false,
+      label: {
+        type: 'spider',
+        labelHeight: 40,
+        formatter: (data, mappingData) => {
+          const group = new G.Group({});
+          group.addShape({
+            type: 'circle',
+            attrs: {
+              x: 0,
+              y: 0,
+              width: 40,
+              height: 50,
+              r: 5,
+              fill: mappingData.color,
+            },
+          });
+          group.addShape({
+            type: 'text',
+            attrs: {
+              x: 10,
+              y: 8,
+              text: `${data.type}`,
+              fill: mappingData.color,
+            },
+          });
+          group.addShape({
+            type: 'text',
+            attrs: {
+              x: 0,
+              y: 25,
+              text: `${data.value}个 ${data.percent * 100}%`,
+              fill: 'rgba(0, 0, 0, 0.65)',
+              fontWeight: 700,
+            },
+          });
+          return group;
+        },
+      },
+      interactions: [
+        {
+          type: 'element-selected',
+        },
+        {
+          type: 'element-active',
+        },
+      ],
+    };
+    const config = cfg;
+    return <Pie {...config} />;
+  };
+
+  // @ts-ignore
   return (
     <PageContainer>
       <Card
         style={{
           borderRadius: 8,
-        }}
-        bodyStyle={{
-          backgroundImage:
-            initialState?.settings?.navTheme === 'realDark'
-              ? 'background-image: linear-gradient(75deg, #1A1B1F 0%, #191C1F 100%)'
-              : 'background-image: linear-gradient(75deg, #FBFDFF 0%, #F5F7FF 100%)',
         }}
       >
         <div
@@ -104,8 +126,8 @@ const Welcome: React.FC = () => {
             backgroundPosition: '100% -30%',
             backgroundRepeat: 'no-repeat',
             backgroundSize: '274px auto',
-            backgroundImage:
-              "url('https://gw.alipayobjects.com/mdn/rms_a9745b/afts/img/A*BuFmQqsB2iAAAAAAAAAAAAAAARQnAQ')",
+            // backgroundImage:
+            //   "url('https://gw.alipayobjects.com/mdn/rms_a9745b/afts/img/A*BuFmQqsB2iAAAAAAAAAAAAAAARQnAQ')",
           }}
         >
           <div
@@ -126,9 +148,11 @@ const Welcome: React.FC = () => {
               width: '65%',
             }}
           >
-            光明筑梦系统 是一个整合了 umi，Ant Design 和 ProComponents
-            的脚手架方案。致力于在设计规范和基础组件的基础上，继续向上构建，提炼出典型模板/业务组件/配套设计资源，进一步提升企业级中后台产品设计研发过程中的『用户』和『设计者』的体验。
+            光明筑梦系统 是一个致力于帮助贫困儿童的频道，在这里我们搭建了一个平台以便帮助贫困儿童。
+            自平台开放以来共注册了{statistic?.donatorNum}名捐助者,{statistic?.childrenNum}名学生,{statistic?.volunteerNum}名志愿者。
+            共有{statistic?.alreadyDonateNum}名捐助者总共捐赠了{statistic?.totalMoney}元，帮助了{statistic?.childrenNum}名贫困儿童！
           </p>
+          <Divider type={"horizontal"}/>
           <div
             style={{
               display: 'flex',
@@ -136,25 +160,17 @@ const Welcome: React.FC = () => {
               gap: 16,
             }}
           >
-            <InfoCard
-              index={1}
-              href="https://umijs.org/docs/introduce/introduce"
-              title="了解 umi"
-              desc="umi 是一个可扩展的企业级前端应用框架,umi 以路由为基础的，同时支持配置式路由和约定式路由，保证路由的功能完备，并以此进行功能扩展。"
-            />
-            <InfoCard
-              index={2}
-              title="了解 ant design"
-              href="https://ant.design"
-              desc="antd 是基于 Ant Design 设计体系的 React UI 组件库，主要用于研发企业级中后台产品。"
-            />
-            <InfoCard
-              index={3}
-              title="了解 Pro Components"
-              href="https://procomponents.ant.design"
-              desc="ProComponents 是一个基于 Ant Design 做了更高抽象的模板组件，以 一个组件就是一个页面为开发理念，为中后台开发带来更好的体验。"
-            />
           </div>
+          <Row>
+            <Col span={12}>
+              <p style={{fontSize: '30px'}}>获得捐款: <AnimatedNumber value={statistic?.totalMoney}/> 元</p>
+            </Col>
+            <Col span={12}>
+              <Typography.Title>
+                <DemoPie/>
+              </Typography.Title>
+            </Col>
+          </Row>
         </div>
       </Card>
     </PageContainer>

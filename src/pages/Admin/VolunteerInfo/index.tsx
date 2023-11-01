@@ -10,8 +10,8 @@ import '@umijs/max';
 import { Button, Drawer, message } from 'antd';
 import React, { useRef, useState } from 'react';
 import {SortOrder} from "antd/lib/table/interface";
-import CreateModal from "@/pages/Admin/VolunteerInfo/components/CreateModal";
-import UpdateModal from "@/pages/Admin/VolunteerInfo/components/UpdateModal";
+import CreateModal from "@/components/Modals/CreateModal";
+import UpdateModal from "@/components/Modals/UpdateModal";
 import {
   addUserUsingPOST,
   deleteUserUsingPOST, listUserVOByPageUsingPOST,
@@ -206,13 +206,14 @@ const TableList: React.FC = () => {
       valueType: 'option',
       render: (_, record) => [
         <Button
-          type={"text"}
+          color={"blue"}
+          type={"link"}
           key="detail"
           onClick={() => {
-            handleRemove(record)
+
           }}
         >
-          详情
+          发布任务
         </Button>,
         <a
           key="modify"

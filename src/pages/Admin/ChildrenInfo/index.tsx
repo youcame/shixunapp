@@ -9,8 +9,8 @@ import '@umijs/max';
 import { Button, Drawer, message } from 'antd';
 import React, { useRef, useState } from 'react';
 import {SortOrder} from "antd/lib/table/interface";
-import CreateModal from "@/pages/Admin/VolunteerInfo/components/CreateModal";
-import UpdateModal from "@/pages/Admin/VolunteerInfo/components/UpdateModal";
+import CreateModal from "@/components/Modals/CreateModal";
+import UpdateModal from "@/components/Modals/UpdateModal";
 import {
   addUserUsingPOST,
   deleteUserUsingPOST, listUserVOByPageUsingPOST,
@@ -18,6 +18,7 @@ import {
 } from "@/services/shixunapp/userController";
 import {useModel} from "@umijs/max";
 import {history} from "@@/core/history";
+import {addTaskUsingPOST} from "@/services/shixunapp/taskController";
 
 const TableList: React.FC = () => {
   /**
@@ -25,21 +26,14 @@ const TableList: React.FC = () => {
    * @zh-CN 新建窗口的弹窗
    *  */
   const [createModalOpen, handleModalOpen] = useState<boolean>(false);
-  /**
-   * @en-US The pop-up window of the distribution update window
-   * @zh-CN 分布更新窗口的弹窗
-   * */
+  const [createTaskModalOpen, handleTaskModalOpen] = useState<boolean>(false);
+
   const [updateModalOpen, handleUpdateModalOpen] = useState<boolean>(false);
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<API.UserVO>();
-  const [selectedRowsState, setSelectedRows] = useState<API.UserVO[]>([]);
   const { initialState } = useModel('@@initialState');
-  /**
-   * @en-US Add node
-   * @zh-CN 添加节点
-   * @param fields
-   */
+
   const handleAdd = async (fields: API.UserVO) => {
     const hide = message.loading('正在添加');
     try {
@@ -55,6 +49,26 @@ const TableList: React.FC = () => {
     } catch (error: any) {
       hide();
       message.error("添加失败",error?.message);
+      return false;
+    }
+  };
+
+  const handleTaskAdd = async (fields: API.TaskVO) => {
+    const hide = message.loading('正在添加任务');
+    try {
+      await addTaskUsingPOST({
+        ...fields,
+        finishUserId: fields.id,
+        types: 0,
+        createUserId: initialState?.loginUser?.id,
+      });
+      hide();
+      message.success('添加任务成功');
+      if(createTaskModalOpen)handleTaskModalOpen(false);
+      return true;
+    } catch (error: any) {
+      hide();
+      message.error("添加任务失败",error?.message);
       return false;
     }
   };
@@ -113,10 +127,37 @@ const TableList: React.FC = () => {
     }
   };
 
-  /**
-   * @en-US International configuration
-   * @zh-CN 国际化配置
-   * */
+  const taskColumn: ProColumns<API.TaskVO>[] = [
+    {
+      title: 'id',
+      dataIndex: 'id',
+      valueType: 'index',
+    },
+    {
+      title: '任务名称',
+      dataIndex: 'title',
+      valueType: 'text',
+      formItemProps: {
+        rules: [{
+          required: true,
+          message: "请输入任务名称",
+        }]
+      }
+    },
+    {
+      title: '任务内容',
+      hideInTable:true,
+      hideInSearch: true,
+      dataIndex: 'content',
+      valueType: 'textarea',
+      formItemProps: {
+        rules: [{
+          required: true,
+          message: "请输入任务内容",
+        }]
+      }
+    },
+  ]
 
   const columns: ProColumns<API.UserVO>[] = [
     {
@@ -208,7 +249,19 @@ const TableList: React.FC = () => {
       valueType: 'option',
       render: (_, record) => [
         <Button
-          type={"text"}
+          color={"blue"}
+          type={"link"}
+          key="detail"
+          onClick={() => {
+            // @ts-ignore
+            handleTaskModalOpen(true);
+          }}
+        >
+          发布学习任务
+        </Button>,
+        <Button
+          color={"blue"}
+          type={"link"}
           key="detail"
           onClick={() => {
             // @ts-ignore
@@ -318,6 +371,7 @@ const TableList: React.FC = () => {
         )}
       </Drawer>
       <CreateModal columns={columns} onCancel={()=>{handleModalOpen(false)}} onSubmit={async (values:API.UserVO)=>{handleAdd(values)}} visible={createModalOpen}/>
+      <CreateModal columns={taskColumn} onCancel={()=>{handleTaskModalOpen(false)}} onSubmit={async (values:API.TaskVO)=>{handleTaskAdd(values)}} visible={createTaskModalOpen}/>
     </PageContainer>
   );
 };

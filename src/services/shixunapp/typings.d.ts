@@ -11,6 +11,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseListTaskVO_ = {
+    code?: number;
+    data?: TaskVO[];
+    message?: string;
+  };
+
   type BaseResponseListUserDonateVO_ = {
     code?: number;
     data?: UserDonateVO[];
@@ -41,6 +47,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseStatisticVO_ = {
+    code?: number;
+    data?: StatisticVO;
+    message?: string;
+  };
+
   type BaseResponseString_ = {
     code?: number;
     data?: string;
@@ -60,6 +72,16 @@ declare namespace API {
   };
 
   type DeleteRequest = {
+    id?: number;
+  };
+
+  type finishTaskByIdUsingGETParams = {
+    /** id */
+    id?: number;
+  };
+
+  type getTaskByIdUsingGETParams = {
+    /** id */
     id?: number;
   };
 
@@ -122,6 +144,29 @@ declare namespace API {
     searchCount?: boolean;
     size?: number;
     total?: number;
+  };
+
+  type StatisticVO = {
+    alreadyDonateNum?: number;
+    alreadyReceiveNum?: number;
+    childrenNum?: number;
+    donatorNum?: number;
+    totalMoney?: number;
+    volunteerNum?: number;
+  };
+
+  type TaskVO = {
+    content?: string;
+    createTime?: string;
+    createUserId?: number;
+    difficulty?: number;
+    finishUserId?: number;
+    id?: number;
+    isFinished?: number;
+    tags?: string;
+    title?: string;
+    types?: number;
+    updateTime?: string;
   };
 
   type uploadFileUsingPOSTParams = {
@@ -208,5 +253,4 @@ declare namespace API {
     userProfile?: string;
     userRole?: string;
   };
-
 }

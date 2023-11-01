@@ -58,9 +58,8 @@ const TableList: React.FC = () => {
                   avatar={<Avatar src={item?.receiveUserVO.userAvatar} />}
                   title={<a href="https://ant.design">{item?.receiveUserVO?.userName}</a>}
                   description={item?.receiveUserVO?.userProfile}
-
                 />
-                <div>在{formatDate(item?.receiveUserVO?.createTime)}时捐赠了{item.donateMoney}元</div>
+                <div>在{formatDate(item?.createTime)}时捐赠了{item.donateMoney}元</div>
                 <div> {item.donateThing? "与"+item.donateThing : ''}</div>
               </List.Item>
             </>

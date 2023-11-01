@@ -16,6 +16,7 @@ export default [
     ],
   },
   { path: '/donate/record', component: './DonateRecord', icon: 'crown'},
+  { path: '/receive/record', component: './ReceiveRecord', icon: 'crown'},
   { path: '/', redirect: '/welcome'},
   { path: '*', layout: false, component: './404' },
 ];

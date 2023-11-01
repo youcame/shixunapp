@@ -1,15 +1,13 @@
 import { PlusOutlined } from '@ant-design/icons';
 import type{ ActionType, ProColumns, ProDescriptionsItemProps } from '@ant-design/pro-components';
 import {
-  FooterToolbar,
   PageContainer,
   ProDescriptions,
   ProTable,
 } from '@ant-design/pro-components';
 import '@umijs/max';
-import {history} from '@umijs/max';
 import { Button, Drawer, message } from 'antd';
-import React, {useRef, useState} from 'react';
+import React, { useRef, useState } from 'react';
 import {SortOrder} from "antd/lib/table/interface";
 import CreateModal from "@/components/Modals/CreateModal";
 import UpdateModal from "@/components/Modals/UpdateModal";
@@ -18,6 +16,8 @@ import {
   deleteUserUsingPOST, listUserVOByPageUsingPOST,
   updateUserUsingPOST,
 } from "@/services/shixunapp/userController";
+import {useModel} from "@umijs/max";
+import {history} from "@@/core/history";
 
 const TableList: React.FC = () => {
   /**
@@ -34,7 +34,7 @@ const TableList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<API.UserVO>();
   const [selectedRowsState, setSelectedRows] = useState<API.UserVO[]>([]);
-
+  const { initialState } = useModel('@@initialState');
   /**
    * @en-US Add node
    * @zh-CN 添加节点
@@ -45,7 +45,7 @@ const TableList: React.FC = () => {
     try {
       await addUserUsingPOST({
         ...fields,
-        userRole: "donator",
+        userRole: "children",
       });
       hide();
       actionRef.current?.reload();
@@ -138,7 +138,7 @@ const TableList: React.FC = () => {
     {
       title: '密码（8位以上不包含特殊字符）',
       hideInTable:true,
-      hideInSearch:true,
+      hideInSearch: true,
       dataIndex: 'userPassword',
       valueType: 'text',
       formItemProps: {
@@ -157,7 +157,7 @@ const TableList: React.FC = () => {
       }
     },
     {
-      title: '昵称',
+      title: '姓名',
       dataIndex: 'userName',
       valueType: 'text',
       formItemProps: {
@@ -208,12 +208,12 @@ const TableList: React.FC = () => {
       valueType: 'option',
       render: (_, record) => [
         <Button
+          color={"blue"}
           type={"link"}
           key="detail"
-          color={"blue"}
           onClick={() => {
             // @ts-ignore
-            history.push(`/donate/record?donatorId=${record.id}`)
+            history.push(`/receive/record?childrenId=${record?.id}`)
           }}
         >
           详情
@@ -269,7 +269,7 @@ const TableList: React.FC = () => {
         request={async (params, sort: Record<string, SortOrder>, filter: Record<string, (string | number)[] | null>) => {
           const res = await listUserVOByPageUsingPOST({
             ...params,
-            userRole: 'donator',
+            userRole: 'children',
           })
           return{
             data: res?.data?.records,
@@ -294,6 +294,7 @@ const TableList: React.FC = () => {
         visible={updateModalOpen}
         values={currentRow || {}}
       />
+
       <Drawer
         width={600}
         open={showDetail}
