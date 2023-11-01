@@ -15,6 +15,7 @@ export default [
       { path: '/admin/donator', component: './Admin/DonatorInfo', name: "捐献者管理", icon: 'crown'},
     ],
   },
+  { path: '/task/record', component: './Task/TaskRecord', icon: 'crown'},
   { path: '/donate/record', component: './DonateRecord', icon: 'crown'},
   { path: '/receive/record', component: './ReceiveRecord', icon: 'crown'},
   { path: '/', redirect: '/welcome'},

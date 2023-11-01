@@ -265,6 +265,17 @@ const TableList: React.FC = () => {
           key="detail"
           onClick={() => {
             // @ts-ignore
+            history.push(`/task/record?id=${record?.id}`)
+          }}
+        >
+          查看任务
+        </Button>,
+        <Button
+          color={"blue"}
+          type={"link"}
+          key="detail"
+          onClick={() => {
+            // @ts-ignore
             history.push(`/receive/record?childrenId=${record?.id}`)
           }}
         >

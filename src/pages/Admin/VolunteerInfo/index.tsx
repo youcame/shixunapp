@@ -1,7 +1,6 @@
 import { PlusOutlined } from '@ant-design/icons';
 import type{ ActionType, ProColumns, ProDescriptionsItemProps } from '@ant-design/pro-components';
 import {
-  FooterToolbar,
   PageContainer,
   ProDescriptions,
   ProTable,
@@ -17,22 +16,20 @@ import {
   deleteUserUsingPOST, listUserVOByPageUsingPOST,
   updateUserUsingPOST,
 } from "@/services/shixunapp/userController";
+import {addTaskUsingPOST} from "@/services/shixunapp/taskController";
+import {useModel} from "@@/exports";
 
 const TableList: React.FC = () => {
-  /**
-   * @en-US Pop-up window of new window
-   * @zh-CN 新建窗口的弹窗
-   *  */
+
   const [createModalOpen, handleModalOpen] = useState<boolean>(false);
-  /**
-   * @en-US The pop-up window of the distribution update window
-   * @zh-CN 分布更新窗口的弹窗
-   * */
+  const [createTaskModalOpen, handleTaskModalOpen] = useState<boolean>(false);
+
   const [updateModalOpen, handleUpdateModalOpen] = useState<boolean>(false);
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<API.UserVO>();
   const [selectedRowsState, setSelectedRows] = useState<API.UserVO[]>([]);
+  const { initialState } = useModel('@@initialState');
   /**
    * @en-US Add node
    * @zh-CN 添加节点
@@ -56,6 +53,26 @@ const TableList: React.FC = () => {
       return false;
     }
   };
+
+  const handleTaskAdd = async (fields: API.TaskVO) => {
+    const hide = message.loading('正在添加任务');
+    try {
+      await addTaskUsingPOST({
+        ...fields,
+        finishUserId: fields.id,
+        types: 1,
+        createUserId: initialState?.loginUser?.id,
+      });
+      hide();
+      message.success('添加任务成功');
+      if (createTaskModalOpen) handleTaskModalOpen(false);
+      return true;
+    } catch (error: any) {
+      hide();
+      message.error("添加任务失败", error?.message);
+      return false;
+    }
+  }
 
 
   /**
@@ -111,10 +128,38 @@ const TableList: React.FC = () => {
     }
   };
 
-  /**
-   * @en-US International configuration
-   * @zh-CN 国际化配置
-   * */
+
+  const taskColumn: ProColumns<API.TaskVO>[] = [
+    {
+      title: 'id',
+      dataIndex: 'id',
+      valueType: 'index',
+    },
+    {
+      title: '任务名称',
+      dataIndex: 'title',
+      valueType: 'text',
+      formItemProps: {
+        rules: [{
+          required: true,
+          message: "请输入任务名称",
+        }]
+      }
+    },
+    {
+      title: '任务内容',
+      hideInTable:true,
+      hideInSearch: true,
+      dataIndex: 'content',
+      valueType: 'textarea',
+      formItemProps: {
+        rules: [{
+          required: true,
+          message: "请输入任务内容",
+        }]
+      }
+    },
+  ]
 
   const columns: ProColumns<API.UserVO>[] = [
     {
@@ -210,10 +255,22 @@ const TableList: React.FC = () => {
           type={"link"}
           key="detail"
           onClick={() => {
-
+            // @ts-ignore
+            handleTaskModalOpen(true);
           }}
         >
-          发布任务
+          发布志愿任务
+        </Button>,
+        <Button
+          color={"blue"}
+          type={"link"}
+          key="detail"
+          onClick={() => {
+            // @ts-ignore
+            history.push(`/task/record?id=${record?.id}`)
+          }}
+        >
+          查看任务
         </Button>,
         <a
           key="modify"
@@ -315,6 +372,7 @@ const TableList: React.FC = () => {
           />
         )}
       </Drawer>
+      <CreateModal columns={taskColumn} onCancel={()=>{handleTaskModalOpen(false)}} onSubmit={async (values:API.TaskVO)=>{handleTaskAdd(values)}} visible={createTaskModalOpen}/>
       <CreateModal columns={columns} onCancel={()=>{handleModalOpen(false)}} onSubmit={async (values:API.UserVO)=>{handleAdd(values)}} visible={createModalOpen}/>
     </PageContainer>
   );
