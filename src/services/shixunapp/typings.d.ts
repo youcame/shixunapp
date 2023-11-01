@@ -75,7 +75,7 @@ declare namespace API {
     id?: number;
   };
 
-  type finishTaskByIdUsingGETParams = {
+  type finishTaskByIdUsingPOSTParams = {
     /** id */
     id?: number;
   };

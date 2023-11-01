@@ -29,14 +29,14 @@ export async function deleteTaskUsingPOST(
   });
 }
 
-/** finishTaskById GET /api/task/finish */
-export async function finishTaskByIdUsingGET(
+/** finishTaskById POST /api/task/finish */
+export async function finishTaskByIdUsingPOST(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.finishTaskByIdUsingGETParams,
+  params: API.finishTaskByIdUsingPOSTParams,
   options?: { [key: string]: any },
 ) {
   return request<API.BaseResponseBoolean_>('/api/task/finish', {
-    method: 'GET',
+    method: 'POST',
     params: {
       ...params,
     },
