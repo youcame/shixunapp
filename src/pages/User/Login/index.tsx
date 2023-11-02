@@ -144,8 +144,8 @@ const Login: React.FC = () => {
             maxWidth: '75vw',
           }}
           logo={<img alt="logo" src="/logo.svg" />}
-          title="Ant Design"
-          subTitle={'pages.layouts.userLayout.title'}
+          title="阳光筑梦"
+          subTitle={'世界最大的公益组织之一，帮助贫困儿童人人有责'}
           initialValues={{
             autoLogin: true,
           }}
@@ -273,8 +273,9 @@ const Login: React.FC = () => {
               style={{
                 float: 'right',
               }}
+              href={"http://localhost:8000/user/register"}
             >
-              忘记密码
+              注册
             </a>
           </div>
         </LoginForm>

@@ -7,7 +7,6 @@ import {useLocation} from "umi";
 import {Avatar, Button, Card, Divider, List, message, Typography} from "antd";
 import {
   deleteTaskUsingPOST,
-  finishTaskByIdUsingGET,
   finishTaskByIdUsingPOST,
   getTaskByIdUsingGET
 } from "@/services/shixunapp/taskController";
