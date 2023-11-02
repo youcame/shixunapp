@@ -213,6 +213,7 @@ declare namespace API {
   };
 
   type PostVO = {
+    avatar?: string;
     content?: string;
     createTime?: string;
     favourNum?: number;

@@ -19,7 +19,7 @@ import {addTaskUsingPOST} from "@/services/shixunapp/taskController";
 import {history, useModel} from "@@/exports";
 import {USERPAGESIZE} from "@/constant";
 
-const TableList: React.FC = () => {
+const VolunteerInfo: React.FC = () => {
 
   const [createModalOpen, handleModalOpen] = useState<boolean>(false);
   const [createTaskModalOpen, handleTaskModalOpen] = useState<boolean>(false);
@@ -48,11 +48,6 @@ const TableList: React.FC = () => {
     getFormInfo();
   },[])
 
-  /**
-   * @en-US Add node
-   * @zh-CN 添加节点
-   * @param fields
-   */
   const handleAdd = async (fields: API.UserVO) => {
     const hide = message.loading('正在添加');
     try {
@@ -397,4 +392,4 @@ const TableList: React.FC = () => {
     </PageContainer>
   );
 };
-export default TableList;
+export default VolunteerInfo;

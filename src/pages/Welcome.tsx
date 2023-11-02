@@ -78,7 +78,7 @@ const Welcome: React.FC = () => {
               >
                 光明筑梦系统 是一个致力于帮助贫困儿童的频道，在这里我们搭建了一个平台以便帮助贫困儿童。
                 自平台开放以来共注册了{statistic?.donatorNum}名捐助者,{statistic?.childrenNum}名学生,{statistic?.volunteerNum}名志愿者。
-                共有{statistic?.alreadyDonateNum}名捐助者总共捐赠了{statistic?.totalMoney}元，帮助了{statistic?.childrenNum}名贫困儿童！
+                共有{statistic?.alreadyDonateNum}名捐助者总共捐赠了{statistic?.totalMoney}元，帮助了{statistic?.alreadyReceiveNum}名贫困儿童！
               </p>
             </Col>
             <Col span={8} className="gutter-row">
@@ -149,25 +149,7 @@ const Welcome: React.FC = () => {
               </Card>
             </Col>
           </Row>
-
-          {/*//一行*/}
-          {/*<Row gutter={16}>*/}
-          {/*  <Col span={16}>*/}
-          {/*    /!*<Card>*!/*/}
-          {/*    /!*  <p style={{fontSize: '30px'}}>获得捐款: <AnimatedNumber value={statistic?.totalMoney}/> 元</p>*!/*/}
-          {/*    /!*</Card>*!/*/}
-          {/*    111*/}
-          {/*  </Col>*/}
-          {/*  <Col span={8}>*/}
-          {/*    <Card>*/}
-          {/*      <Typography.Title>*/}
-          {/*        <MyRador/>*/}
-          {/*      </Typography.Title>*/}
-          {/*    </Card>*/}
-          {/*  </Col>*/}
-          {/*</Row>*/}
         </div>
-
     </PageContainer>
   );
 };

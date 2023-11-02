@@ -20,7 +20,7 @@ import {history} from "@@/core/history";
 import {addTaskUsingPOST} from "@/services/shixunapp/taskController";
 import {USERPAGESIZE} from "@/constant";
 
-const TableList: React.FC = () => {
+const ChildrenInfo: React.FC = () => {
   /**
    * @en-US Pop-up window of new window
    * @zh-CN 新建窗口的弹窗
@@ -405,4 +405,4 @@ const TableList: React.FC = () => {
     </PageContainer>
   );
 };
-export default TableList;
+export default ChildrenInfo;

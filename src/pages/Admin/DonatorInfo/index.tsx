@@ -18,7 +18,7 @@ import {
 } from "@/services/shixunapp/userController";
 import {USERPAGESIZE} from "@/constant";
 
-const TableList: React.FC = () => {
+const DonateInfo: React.FC = () => {
   /**
    * @en-US Pop-up window of new window
    * @zh-CN 新建窗口的弹窗
@@ -329,4 +329,4 @@ const TableList: React.FC = () => {
     </PageContainer>
   );
 };
-export default TableList;
+export default DonateInfo;
