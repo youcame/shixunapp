@@ -7,8 +7,7 @@ import {
 } from '@ant-design/pro-components';
 import '@umijs/max';
 import { Button, Drawer, message } from 'antd';
-import React, { useRef, useState } from 'react';
-import {SortOrder} from "antd/lib/table/interface";
+import React, {useEffect, useRef, useState} from 'react';
 import CreateModal from "@/components/Modals/CreateModal";
 import UpdateModal from "@/components/Modals/UpdateModal";
 import {
@@ -19,6 +18,7 @@ import {
 import {useModel} from "@umijs/max";
 import {history} from "@@/core/history";
 import {addTaskUsingPOST} from "@/services/shixunapp/taskController";
+import {USERPAGESIZE} from "@/constant";
 
 const TableList: React.FC = () => {
   /**
@@ -32,7 +32,21 @@ const TableList: React.FC = () => {
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<API.UserVO>();
+  //分页
+  const [formValue,setFormValue] = useState<API.UserVO[]>([]);
+  const [total,setTotal] = useState<number>(0)
   const { initialState } = useModel('@@initialState');
+
+  const getFormInfo = async (current=1,pageSize=USERPAGESIZE)=>{
+    const res = await listUserVOByPageUsingPOST({
+      current,
+      pageSize,
+      sortField: 'id',
+      userRole: 'children',
+    })
+    setTotal(res?.data?.total || 0)
+    setFormValue(res?.data?.records || []);
+  }
 
   const handleAdd = async (fields: API.UserVO) => {
     const hide = message.loading('正在添加');
@@ -102,6 +116,9 @@ const TableList: React.FC = () => {
     }
   };
 
+  useEffect(()=>{
+    getFormInfo();
+  },[])
 
   /**
    * @en-US Update node
@@ -310,11 +327,13 @@ const TableList: React.FC = () => {
   return (
     <PageContainer>
       <ProTable<API.UserVO, API.PageParams>
-        pagination={
-          {
-            pageSize: 5
-          }
-        }
+        pagination={{
+          total,
+          pageSize: USERPAGESIZE,
+          onChange: async (page,pageSize) => {
+            await getFormInfo(page,pageSize);
+          },
+        }}
         headerTitle={'用户信息'}
         actionRef={actionRef}
         rowKey="key"
@@ -332,19 +351,16 @@ const TableList: React.FC = () => {
             <PlusOutlined /> 新建用户
           </Button>,
         ]}
-        request={async (params, sort: Record<string, SortOrder>, filter: Record<string, (string | number)[] | null>) => {
-          const res = await listUserVOByPageUsingPOST({
-            ...params,
-            userRole: 'children',
-          })
-          return{
-            data: res?.data?.records,
-          }
+        request={async () => {
+          await getFormInfo(1,USERPAGESIZE); // 在这里执行 loadFormData()
+          return {
+            data: formValue || {},
+          };
         }}
         columns={columns}
         rowSelection={{
-          onChange: (_, selectedRows) => {
-            setSelectedRows(selectedRows);
+          onChange: () => {
+
           },
         }}
       />

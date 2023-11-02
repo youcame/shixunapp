@@ -22,7 +22,7 @@ const App: React.FC = () => {
       current,
       pageSize,
     });
-    setTotal(res?.data?.total);
+    setTotal(res?.data?.total || 0);
     setFormValue(res?.data?.records);
   }
   useEffect(()=>{
@@ -68,7 +68,7 @@ const App: React.FC = () => {
             }
           >
             <List.Item.Meta
-              avatar={<Avatar src={item?.user.userAvatar}/>}
+              avatar={<Avatar src={item?.user?.userAvatar || ""}/>}
               title={<a>{item.title}</a>}
               description={item?.tagList}
             />

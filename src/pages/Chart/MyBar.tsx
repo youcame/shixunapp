@@ -4,10 +4,6 @@ import { Bar } from '@ant-design/plots';
 const MyBar = () => {
   const [data, setData] = useState([]);
 
-  useEffect(() => {
-    asyncFetch();
-  }, []);
-
   const asyncFetch = () => {
     fetch('https://gw.alipayobjects.com/os/bmw-prod/be63e0a2-d2be-4c45-97fd-c00f752a66d4.json')
       .then((response) => response.json())
@@ -16,6 +12,9 @@ const MyBar = () => {
         console.log('fetch data failed', error);
       });
   };
+  useEffect(() => {
+    asyncFetch();
+  }, []);
 
   const config = {
     data,
@@ -31,6 +30,7 @@ const MyBar = () => {
     },
   };
 
+  // @ts-ignore
   return <Bar {...config} />;
 };
 

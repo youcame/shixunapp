@@ -40,7 +40,7 @@ const MyRadar = () => {
         alias: 'star 数量',
         min: 0,
         nice: true,
-        formatter: (v) => Number(v).toFixed(2),
+        formatter: (v: any) => Number(v).toFixed(2),
       },
     },
     xAxis: {

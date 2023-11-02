@@ -1,4 +1,4 @@
-import { PlusOutlined } from '@ant-design/icons';
+import {PlusOutlined} from '@ant-design/icons';
 import type{ ActionType, ProColumns, ProDescriptionsItemProps } from '@ant-design/pro-components';
 import {
   PageContainer,
@@ -6,9 +6,8 @@ import {
   ProTable,
 } from '@ant-design/pro-components';
 import '@umijs/max';
-import { Button, Drawer, message } from 'antd';
+import {Button, Drawer, message} from 'antd';
 import React, {useEffect, useRef, useState} from 'react';
-import {SortOrder} from "antd/lib/table/interface";
 import CreateModal from "@/components/Modals/CreateModal";
 import UpdateModal from "@/components/Modals/UpdateModal";
 import {
@@ -18,6 +17,7 @@ import {
 } from "@/services/shixunapp/userController";
 import {addTaskUsingPOST} from "@/services/shixunapp/taskController";
 import {history, useModel} from "@@/exports";
+import {USERPAGESIZE} from "@/constant";
 
 const TableList: React.FC = () => {
 
@@ -28,20 +28,20 @@ const TableList: React.FC = () => {
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<API.UserVO>();
-  const [selectedRowsState, setSelectedRows] = useState<API.UserVO[]>([]);
   //分页
   const [formValue,setFormValue] = useState<API.UserVO[]>([]);
   const [total,setTotal] = useState<number>(0)
   const { initialState } = useModel('@@initialState');
 
-  const getFormInfo = async (current=1,pageSize=5)=>{
+  const getFormInfo = async (current=1,pageSize=USERPAGESIZE)=>{
     const res = await listUserVOByPageUsingPOST({
       current,
       pageSize,
+      sortField: 'id',
       userRole: 'volunteer',
     })
-    setTotal(res?.data?.total)
-    setFormValue(res?.data?.records);
+    setTotal(res?.data?.total || 0)
+    setFormValue(res?.data?.records || []);
   }
 
   useEffect(()=>{
@@ -170,7 +170,7 @@ const TableList: React.FC = () => {
     },
     {
       title: '任务内容',
-      hideInTable:true,
+      hideInTable: true,
       hideInSearch: true,
       dataIndex: 'content',
       valueType: 'textarea',
@@ -180,8 +180,8 @@ const TableList: React.FC = () => {
           message: "请输入任务内容",
         }]
       }
-    },
-  ]
+    }
+  ];
 
   const columns: ProColumns<API.UserVO>[] = [
     {
@@ -322,7 +322,7 @@ const TableList: React.FC = () => {
       <ProTable<API.UserVO, API.PageParams>
         pagination={{
           total,
-          pageSize: 5,
+          pageSize: USERPAGESIZE,
           onChange: async (page,pageSize) => {
             await getFormInfo(page,pageSize);
           },
@@ -344,13 +344,15 @@ const TableList: React.FC = () => {
             <PlusOutlined /> 新建用户
           </Button>,
         ]}
-        request={async () => ({
-          data: formValue || {},
-        })}
+        request={async () => {
+          await getFormInfo(1,USERPAGESIZE); // 在这里执行 loadFormData()
+          return {
+            data: formValue || {},
+          };
+        }}
         columns={columns}
         rowSelection={{
-          onChange: (_, selectedRows) => {
-            setSelectedRows(selectedRows);
+          onChange: () => {
           },
         }}
       />

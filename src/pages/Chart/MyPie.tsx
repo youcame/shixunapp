@@ -1,6 +1,7 @@
 import React from 'react';
 import { Pie } from '@ant-design/plots';
 
+// @ts-ignore
 const MyPieChart = ({pieData}) => {
   const config = {
     appendPadding: 10,
@@ -39,7 +40,8 @@ const MyPieChart = ({pieData}) => {
     }
   };
 
-  return <Pie {...config} style={{padding: ["0","0","0","0"]}}/>;
+  // @ts-ignore
+  return <Pie {...config}/>;
 };
 
 export default MyPieChart;

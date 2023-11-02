@@ -1,7 +1,6 @@
 import { PlusOutlined } from '@ant-design/icons';
 import type{ ActionType, ProColumns, ProDescriptionsItemProps } from '@ant-design/pro-components';
 import {
-  FooterToolbar,
   PageContainer,
   ProDescriptions,
   ProTable,
@@ -9,8 +8,7 @@ import {
 import '@umijs/max';
 import {history} from '@umijs/max';
 import { Button, Drawer, message } from 'antd';
-import React, {useRef, useState} from 'react';
-import {SortOrder} from "antd/lib/table/interface";
+import React, {useEffect, useRef, useState} from 'react';
 import CreateModal from "@/components/Modals/CreateModal";
 import UpdateModal from "@/components/Modals/UpdateModal";
 import {
@@ -18,6 +16,7 @@ import {
   deleteUserUsingPOST, listUserVOByPageUsingPOST,
   updateUserUsingPOST,
 } from "@/services/shixunapp/userController";
+import {USERPAGESIZE} from "@/constant";
 
 const TableList: React.FC = () => {
   /**
@@ -33,8 +32,21 @@ const TableList: React.FC = () => {
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<API.UserVO>();
-  const [selectedRowsState, setSelectedRows] = useState<API.UserVO[]>([]);
 
+  //分页
+  const [formValue,setFormValue] = useState<API.UserVO[]>([]);
+  const [total,setTotal] = useState<number>(0)
+
+  const getFormInfo = async (current=1,pageSize=USERPAGESIZE)=>{
+    const res = await listUserVOByPageUsingPOST({
+      current,
+      pageSize,
+      sortField: 'id',
+      userRole: 'donator',
+    })
+    setTotal(res?.data?.total || 0)
+    setFormValue(res?.data?.records || []);
+  }
   /**
    * @en-US Add node
    * @zh-CN 添加节点
@@ -113,10 +125,9 @@ const TableList: React.FC = () => {
     }
   };
 
-  /**
-   * @en-US International configuration
-   * @zh-CN 国际化配置
-   * */
+  useEffect(()=>{
+    getFormInfo();
+  },[])
 
   const columns: ProColumns<API.UserVO>[] = [
     {
@@ -243,12 +254,13 @@ const TableList: React.FC = () => {
   return (
     <PageContainer>
       <ProTable<API.UserVO, API.PageParams>
-        params={
-          {
-            pageSize: 8,
-            current: 1,
-          }
-        }
+        pagination={{
+          total,
+          pageSize: USERPAGESIZE,
+          onChange: async (page,pageSize) => {
+            await getFormInfo(page,pageSize);
+          },
+        }}
         headerTitle={'用户信息'}
         actionRef={actionRef}
         rowKey="key"
@@ -266,19 +278,15 @@ const TableList: React.FC = () => {
             <PlusOutlined /> 新建用户
           </Button>,
         ]}
-        request={async (params, sort: Record<string, SortOrder>, filter: Record<string, (string | number)[] | null>) => {
-          const res = await listUserVOByPageUsingPOST({
-            ...params,
-            userRole: 'donator',
-          })
-          return{
-            data: res?.data?.records,
-          }
+        request={async () => {
+          await getFormInfo(1,USERPAGESIZE); // 在这里执行 loadFormData()
+          return {
+            data: formValue || {},
+          };
         }}
         columns={columns}
         rowSelection={{
-          onChange: (_, selectedRows) => {
-            setSelectedRows(selectedRows);
+          onChange: () => {
           },
         }}
       />

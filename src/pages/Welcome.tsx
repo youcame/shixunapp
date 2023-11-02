@@ -1,8 +1,7 @@
 import { PageContainer } from '@ant-design/pro-components';
-import {Card, Col, Divider, message, Row, theme, Typography} from 'antd';
+import {Card, Col, Divider, message, Row, theme} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {getStatisticUsingGET} from "@/services/shixunapp/userDonateController";
-import {G2, Pie} from '@ant-design/plots';
 import {animated, useSpring} from "react-spring";
 import MyRador from './Chart/MyRador';
 import MyLineChart from "@/pages/Chart/MyLineChart";
@@ -10,6 +9,7 @@ import MyBar from "@/pages/Chart/MyBar";
 import MyPie from './Chart/MyPie';
 import { pieData,pieData2,pieData3,pieData4 } from '@/constant/chart';
 
+// @ts-ignore
 const AnimatedNumber = ({ value }) => {
   const { number } = useSpring({
     from: { number: 0 },
@@ -42,81 +42,6 @@ const Welcome: React.FC = () => {
   useEffect(()=>{
     getStatisticInfo();
   },[])
-
-
-  const DemoPie = () => {
-    const G = G2.getEngine('canvas');
-    const data = [
-      {
-        type: '志愿者',
-        value: statistic?.volunteerNum || 0,
-      },
-      {
-        type: '儿童',
-        value: statistic?.childrenNum||0,
-      },
-      {
-        type: '捐助者',
-        value: statistic?.donatorNum||0,
-      },
-    ];
-    const cfg = {
-      appendPadding: 10,
-      data,
-      angleField: 'value',
-      colorField: 'type',
-      radius: 0.75,
-      legend: false,
-      label: {
-        type: 'spider',
-        labelHeight: 40,
-        formatter: (data, mappingData) => {
-          const group = new G.Group({});
-          group.addShape({
-            type: 'circle',
-            attrs: {
-              x: 0,
-              y: 0,
-              width: 40,
-              height: 50,
-              r: 5,
-              fill: mappingData.color,
-            },
-          });
-          group.addShape({
-            type: 'text',
-            attrs: {
-              x: 10,
-              y: 8,
-              text: `${data.type}`,
-              fill: mappingData.color,
-            },
-          });
-          group.addShape({
-            type: 'text',
-            attrs: {
-              x: 0,
-              y: 25,
-              text: `${data.value}个 ${data.percent * 100}%`,
-              fill: 'rgba(0, 0, 0, 0.65)',
-              fontWeight: 700,
-            },
-          });
-          return group;
-        },
-      },
-      interactions: [
-        {
-          type: 'element-selected',
-        },
-        {
-          type: 'element-active',
-        },
-      ],
-    };
-    const config = cfg;
-    return <Pie {...config} />;
-  };
 
   // @ts-ignore
   return (
