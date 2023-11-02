@@ -1,8 +1,7 @@
-import { LikeOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
+import {LikeOutlined, MessageOutlined, PlusOutlined, StarOutlined} from '@ant-design/icons';
 import React, {useEffect, useState} from 'react';
-import { Avatar, List, Space } from 'antd';
+import {Avatar, Button, List, Space} from 'antd';
 import {PageContainer} from "@ant-design/pro-components";
-import {useLocation} from "../../.umi/exports";
 import {listPostVOByPageUsingPOST} from "../../services/shixunapp/postController";
 import {NEWSAVATAR, PAGESIZE} from "@/constant";
 
@@ -16,17 +15,14 @@ const IconText = ({ icon, text }: { icon: React.FC; text: string }) => (
 const App: React.FC = () => {
 
   const [formValue,setFormValue] = useState<API.PostVO[]>();
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
   const [total,setTotal] = useState<number>(0)
 
   const getPostInfo =async (current=1,pageSize=PAGESIZE)=>{
-    const id = queryParams.get('donatorId');
     const res =await listPostVOByPageUsingPOST({
       current,
       pageSize,
     });
-    setTotal(res?.data?.total)
+    setTotal(res?.data?.total);
     setFormValue(res?.data?.records);
   }
   useEffect(()=>{
@@ -47,9 +43,13 @@ const App: React.FC = () => {
         }}
         dataSource={formValue}
         footer={
-          <div>
-            <b>ant design</b> footer part
-          </div>
+          <Button
+
+            type={"primary"}
+            // onClick={}
+          >
+            <PlusOutlined />发布新闻
+          </Button>
         }
         renderItem={(item) => (
           <List.Item

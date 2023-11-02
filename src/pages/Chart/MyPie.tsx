@@ -1,8 +1,7 @@
 import React from 'react';
 import { Pie } from '@ant-design/plots';
-import {pieData} from "@/constant/chart";
 
-const MyPieChart = () => {
+const MyPieChart = ({pieData}) => {
   const config = {
     appendPadding: 10,
     data: pieData, // 使用从 chartData.ts 引入的数据

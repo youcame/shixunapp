@@ -272,6 +272,7 @@ declare namespace API {
     userAvatar?: string;
     userName?: string;
     userPassword?: string;
+    userProfile?: string;
     userRole?: string;
   };
 

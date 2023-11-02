@@ -8,6 +8,7 @@ import MyRador from './Chart/MyRador';
 import MyLineChart from "@/pages/Chart/MyLineChart";
 import MyBar from "@/pages/Chart/MyBar";
 import MyPie from './Chart/MyPie';
+import { pieData,pieData2,pieData3,pieData4 } from '@/constant/chart';
 
 const AnimatedNumber = ({ value }) => {
   const { number } = useSpring({
@@ -198,28 +199,28 @@ const Welcome: React.FC = () => {
             <Col span={6} className="gutter-row">
               <Card size={"small"}>
                 <div className="custom-content">儿童地区分布</div>
-                <MyPie/>
+                <MyPie pieData={pieData}/>
               </Card>
             </Col>
 
             <Col span={6} className="gutter-row">
               <Card size={"small"}>
                 <div className="custom-content">儿童地区分布</div>
-                <MyPie/>
+                <MyPie pieData={pieData2}/>
               </Card>
             </Col>
 
             <Col span={6} className="gutter-row">
               <Card size={"small"}>
                 <div className="custom-content">儿童地区分布</div>
-                <MyPie/>
+                <MyPie pieData={pieData3}/>
               </Card>
             </Col>
 
             <Col span={6} className="gutter-row">
               <Card size={"small"}>
                 <div className="custom-content">儿童地区分布</div>
-                <MyPie/>
+                <MyPie pieData={pieData4}/>
               </Card>
             </Col>
           </Row>

@@ -7,7 +7,7 @@ import {
 } from '@ant-design/pro-components';
 import '@umijs/max';
 import { Button, Drawer, message } from 'antd';
-import React, { useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {SortOrder} from "antd/lib/table/interface";
 import CreateModal from "@/components/Modals/CreateModal";
 import UpdateModal from "@/components/Modals/UpdateModal";
@@ -29,7 +29,25 @@ const TableList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<API.UserVO>();
   const [selectedRowsState, setSelectedRows] = useState<API.UserVO[]>([]);
+  //分页
+  const [formValue,setFormValue] = useState<API.UserVO[]>([]);
+  const [total,setTotal] = useState<number>(0)
   const { initialState } = useModel('@@initialState');
+
+  const getFormInfo = async (current=1,pageSize=5)=>{
+    const res = await listUserVOByPageUsingPOST({
+      current,
+      pageSize,
+      userRole: 'volunteer',
+    })
+    setTotal(res?.data?.total)
+    setFormValue(res?.data?.records);
+  }
+
+  useEffect(()=>{
+    getFormInfo();
+  },[])
+
   /**
    * @en-US Add node
    * @zh-CN 添加节点
@@ -302,12 +320,13 @@ const TableList: React.FC = () => {
   return (
     <PageContainer>
       <ProTable<API.UserVO, API.PageParams>
-        params={
-          {
-            pageSize: 8,
-            current: 1,
-          }
-        }
+        pagination={{
+          total,
+          pageSize: 5,
+          onChange: async (page,pageSize) => {
+            await getFormInfo(page,pageSize);
+          },
+        }}
         headerTitle={'用户信息'}
         actionRef={actionRef}
         rowKey="key"
@@ -325,15 +344,9 @@ const TableList: React.FC = () => {
             <PlusOutlined /> 新建用户
           </Button>,
         ]}
-        request={async (params, sort: Record<string, SortOrder>, filter: Record<string, (string | number)[] | null>) => {
-          const res = await listUserVOByPageUsingPOST({
-            ...params,
-            userRole: 'volunteer',
-          })
-          return{
-            data: res?.data?.records,
-          }
-        }}
+        request={async () => ({
+          data: formValue || {},
+        })}
         columns={columns}
         rowSelection={{
           onChange: (_, selectedRows) => {

@@ -310,10 +310,9 @@ const TableList: React.FC = () => {
   return (
     <PageContainer>
       <ProTable<API.UserVO, API.PageParams>
-        params={
+        pagination={
           {
-            pageSize: 8,
-            current: 1,
+            pageSize: 5
           }
         }
         headerTitle={'用户信息'}
