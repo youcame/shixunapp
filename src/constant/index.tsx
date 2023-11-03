@@ -35,6 +35,97 @@ export const TASKCOLUMN : ProColumns<API.TaskVO>[] = [
     }
   },
 ]
+export const USERCOLUMN : ProColumns<API.UserVO>[] = [
+  {
+    title: 'id',
+    dataIndex: 'id',
+    valueType: 'index',
+  },
+  {
+    title: '账户名',
+    dataIndex: 'userAccount',
+    valueType: 'text',
+    formItemProps: {
+      rules: [{
+        required: true,
+        message: "请输入账户名",
+      }]
+    }
+  },
+  {
+    title: '密码（8位以上不包含特殊字符）',
+    hideInTable:true,
+    hideInSearch:true,
+    dataIndex: 'userPassword',
+    valueType: 'text',
+    formItemProps: {
+      rules: [{
+        required: true,
+        message: "请输入密码",
+      },{
+        type: "string",
+        min: 8,
+        message: "密码小于8位",
+      },
+        {
+          pattern: /^[a-zA-Z0-9]+$/,
+          message: "不允许包含特殊字符",
+        }]
+    }
+  },
+  {
+    title: '昵称',
+    dataIndex: 'userName',
+    valueType: 'text',
+    formItemProps: {
+      rules: [{
+        required: true,
+        message: "请输入姓名",
+      }]
+    }
+  },
+  {
+    title: '简介',
+    dataIndex: 'userProfile',
+    valueType: 'textarea',
+  },
+  {
+    title: '详细介绍',
+    dataIndex: 'detailProfile',
+    hideInTable: true,
+    valueType: 'textarea',
+  },
+  {
+    title: '角色',
+    dataIndex: 'userRole',
+    hideInForm: true,
+    valueEnum: {
+      'admin': {
+        text: '管理员',
+        status: 'Success',
+      },
+      'children': {
+        text: '儿童',
+        status: 'Success',
+      },
+      'volunteer': {
+        text: '志愿者',
+        status: 'Success',
+      },
+      'donator': {
+        text: '捐助者',
+        status: 'Success',
+      },
+    },
+  },
+  {
+    title: '创建时间',
+    sorter: true,
+    dataIndex: 'createTime',
+    valueType: 'dateTime',
+    hideInForm: true,
+  }
+]
 
 
 
