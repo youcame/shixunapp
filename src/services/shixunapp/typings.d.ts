@@ -258,6 +258,7 @@ declare namespace API {
 
   type User = {
     createTime?: string;
+    detailProfile?: string;
     id?: number;
     isDelete?: number;
     updateTime?: string;
@@ -330,6 +331,7 @@ declare namespace API {
 
   type UserVO = {
     createTime?: string;
+    detailProfile?: string;
     id?: number;
     userAccount?: string;
     userAvatar?: string;

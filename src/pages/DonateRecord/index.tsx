@@ -1,4 +1,3 @@
-import type{ ProColumns} from '@ant-design/pro-components';
 import {
   PageContainer,
 } from '@ant-design/pro-components';
@@ -7,7 +6,6 @@ import {useEffect, useState} from "react";
 import {getUserDonateByIdUsingGET} from "@/services/shixunapp/userDonateController";
 import {useLocation} from "umi";
 import {Avatar, Card, Divider, List, Typography} from "antd";
-import {date} from "@umijs/utils/compiled/zod";
 import {formatDate} from "../../../utils/timeUtil";
 
 const TableList: React.FC = () => {

@@ -17,7 +17,7 @@ import {
 } from "@/services/shixunapp/userController";
 import {addTaskUsingPOST} from "@/services/shixunapp/taskController";
 import {history, useModel} from "@@/exports";
-import {USERPAGESIZE} from "@/constant";
+import {TASKCOLUMN, USERPAGESIZE} from "@/constant";
 
 const VolunteerInfo: React.FC = () => {
 
@@ -144,39 +144,6 @@ const VolunteerInfo: React.FC = () => {
       return false;
     }
   };
-
-
-  const taskColumn: ProColumns<API.TaskVO>[] = [
-    {
-      title: 'id',
-      dataIndex: 'id',
-      valueType: 'index',
-    },
-    {
-      title: '任务名称',
-      dataIndex: 'title',
-      valueType: 'text',
-      formItemProps: {
-        rules: [{
-          required: true,
-          message: "请输入任务名称",
-        }]
-      }
-    },
-    {
-      title: '任务内容',
-      hideInTable: true,
-      hideInSearch: true,
-      dataIndex: 'content',
-      valueType: 'textarea',
-      formItemProps: {
-        rules: [{
-          required: true,
-          message: "请输入任务内容",
-        }]
-      }
-    }
-  ];
 
   const columns: ProColumns<API.UserVO>[] = [
     {
@@ -384,7 +351,7 @@ const VolunteerInfo: React.FC = () => {
           />
         )}
       </Drawer>
-      <CreateModal columns={taskColumn} onCancel={()=>{handleTaskModalOpen(false)}} onSubmit={async (values:API.TaskVO)=>{handleTaskAdd(values)}} visible={createTaskModalOpen} file={true}/>
+      <CreateModal columns={TASKCOLUMN} onCancel={()=>{handleTaskModalOpen(false)}} onSubmit={async (values:API.TaskVO)=>{handleTaskAdd(values)}} visible={createTaskModalOpen} file={true}/>
       <CreateModal columns={columns} onCancel={()=>{handleModalOpen(false)}} onSubmit={async (values:API.UserVO)=>{handleAdd(values)}} visible={createModalOpen}/>
     </PageContainer>
   );
