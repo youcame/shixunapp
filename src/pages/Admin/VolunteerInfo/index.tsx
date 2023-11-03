@@ -339,12 +339,9 @@ const VolunteerInfo: React.FC = () => {
             <PlusOutlined /> 新建用户
           </Button>,
         ]}
-        request={async () => {
-          await getFormInfo(1,USERPAGESIZE); // 在这里执行 loadFormData()
-          return {
-            data: formValue || {},
-          };
-        }}
+        request={async () => ({
+          data: formValue || {},
+        })}
         columns={columns}
         rowSelection={{
           onChange: () => {
@@ -387,7 +384,7 @@ const VolunteerInfo: React.FC = () => {
           />
         )}
       </Drawer>
-      <CreateModal columns={taskColumn} onCancel={()=>{handleTaskModalOpen(false)}} onSubmit={async (values:API.TaskVO)=>{handleTaskAdd(values)}} visible={createTaskModalOpen}/>
+      <CreateModal columns={taskColumn} onCancel={()=>{handleTaskModalOpen(false)}} onSubmit={async (values:API.TaskVO)=>{handleTaskAdd(values)}} visible={createTaskModalOpen} file={true}/>
       <CreateModal columns={columns} onCancel={()=>{handleModalOpen(false)}} onSubmit={async (values:API.UserVO)=>{handleAdd(values)}} visible={createModalOpen}/>
     </PageContainer>
   );

@@ -178,6 +178,7 @@ declare namespace API {
 
   type PostAddRequest = {
     content?: string;
+    file?: string;
     tags?: string[];
     title?: string;
   };

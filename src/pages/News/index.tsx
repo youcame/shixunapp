@@ -73,6 +73,19 @@ const App: React.FC = () => {
         }]
       }
     },
+    {
+      title: '新闻图片',
+      hideInSearch: true,
+      hideInForm: true,
+      dataIndex: 'file',
+      valueType: 'image',
+      formItemProps: {
+        rules: [{
+          required: true,
+          message: "请输入新闻图片",
+        }]
+      }
+    },
   ]
 
   const handleAdd = async (fields: API.PostAddRequest) => {
@@ -143,7 +156,7 @@ const App: React.FC = () => {
           </List.Item>
         )}
       />
-      <CreateModal columns={newsColumn} onCancel={()=>{handleModalOpen(false)}} onSubmit={async (values:API.PostAddRequest)=>{handleAdd(values)}} visible={createModalOpen}/>
+      <CreateModal columns={newsColumn} onCancel={()=>{handleModalOpen(false)}} onSubmit={async (values:API.PostAddRequest)=>{handleAdd(values)}} visible={createModalOpen} file={true}/>
     </PageContainer>
   );
 };

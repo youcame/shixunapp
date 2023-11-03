@@ -278,12 +278,9 @@ const DonateInfo: React.FC = () => {
             <PlusOutlined /> 新建用户
           </Button>,
         ]}
-        request={async () => {
-          await getFormInfo(1,USERPAGESIZE); // 在这里执行 loadFormData()
-          return {
-            data: formValue || {},
-          };
-        }}
+        request={async () => ({
+          data: formValue || {},
+        })}
         columns={columns}
         rowSelection={{
           onChange: () => {

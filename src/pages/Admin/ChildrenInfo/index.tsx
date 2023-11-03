@@ -283,7 +283,7 @@ const ChildrenInfo: React.FC = () => {
         <Button
           color={"blue"}
           type={"link"}
-          key="detail"
+          key="viewTask"
           onClick={() => {
             // @ts-ignore
             history.push(`/task/record?id=${record?.id}`)
@@ -327,6 +327,7 @@ const ChildrenInfo: React.FC = () => {
   return (
     <PageContainer>
       <ProTable<API.UserVO, API.PageParams>
+        key="main"
         pagination={{
           total,
           pageSize: USERPAGESIZE,
@@ -351,12 +352,9 @@ const ChildrenInfo: React.FC = () => {
             <PlusOutlined /> 新建用户
           </Button>,
         ]}
-        request={async () => {
-          await getFormInfo(1,USERPAGESIZE); // 在这里执行 loadFormData()
-          return {
-            data: formValue || {},
-          };
-        }}
+        request={async () => ({
+          data: formValue || {},
+        })}
         columns={columns}
         rowSelection={{
           onChange: () => {
@@ -378,6 +376,7 @@ const ChildrenInfo: React.FC = () => {
       />
 
       <Drawer
+        key="drawer"
         width={600}
         open={showDetail}
         onClose={() => {
@@ -401,7 +400,7 @@ const ChildrenInfo: React.FC = () => {
         )}
       </Drawer>
       <CreateModal columns={columns} onCancel={()=>{handleModalOpen(false)}} onSubmit={async (values:API.UserVO)=>{handleAdd(values)}} visible={createModalOpen}/>
-      <CreateModal columns={taskColumn} onCancel={()=>{handleTaskModalOpen(false)}} onSubmit={async (values:API.TaskVO)=>{handleTaskAdd(values)}} visible={createTaskModalOpen}/>
+      <CreateModal columns={taskColumn} onCancel={()=>{handleTaskModalOpen(false)}} onSubmit={async (values:API.TaskVO)=>{handleTaskAdd(values)}} visible={createTaskModalOpen} file={true}/>
     </PageContainer>
   );
 };
