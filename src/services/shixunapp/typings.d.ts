@@ -1,4 +1,13 @@
 declare namespace API {
+  type addResourceUsingPOSTParams = {
+    donateUserId?: number;
+    goods?: number;
+    id?: number;
+    money?: number;
+    month?: number;
+    year?: number;
+  };
+
   type BaseResponseBoolean_ = {
     code?: number;
     data?: boolean;
@@ -8,6 +17,12 @@ declare namespace API {
   type BaseResponseInt_ = {
     code?: number;
     data?: number;
+    message?: string;
+  };
+
+  type BaseResponseListResourceVO_ = {
+    code?: number;
+    data?: ResourceVO[];
     message?: string;
   };
 
@@ -234,6 +249,14 @@ declare namespace API {
     updateTime?: string;
     user?: UserVO;
     userId?: number;
+  };
+
+  type ResourceVO = {
+    goods?: number;
+    id?: number;
+    money?: number;
+    month?: number;
+    year?: number;
   };
 
   type StatisticVO = {

@@ -1,12 +1,9 @@
 import { getFakeCaptcha } from '@/services/ant-design-pro/login';
 import Footer from '@/components/Footer';
 import {
-  AlipayCircleOutlined,
   LockOutlined,
   MobileOutlined,
-  TaobaoCircleOutlined,
   UserOutlined,
-  WeiboCircleOutlined,
 } from '@ant-design/icons';
 import {
   LoginForm,

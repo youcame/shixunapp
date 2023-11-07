@@ -154,6 +154,69 @@ export const DONATECOLUMN : ProColumns<API.UserDonateVO>[] = [
     dataIndex: 'donateThing',
     valueType: 'text',
   },
+  {
+    title: '捐款物资',
+    hideInTable:true,
+    hideInSearch: true,
+    dataIndex: 'donateThing',
+    valueType: 'text',
+  },
+  {
+    title: '捐款物资',
+    hideInTable:true,
+    hideInSearch: true,
+    dataIndex: 'donateThing',
+    valueType: 'text',
+  },
+]
+
+export const TOTALDONATECOLUMN : ProColumns<API.UserDonateVO>[] = [
+  {
+    title: 'id',
+    dataIndex: 'id',
+    valueType: 'index',
+  },
+  {
+    title: '捐献月份',
+    hideInSearch: true,
+    initialValue: 11,
+    dataIndex: 'month',
+    valueType: 'text',
+    formItemProps: {
+      initialValue: 11,
+      rules: [{
+        required: true,
+        message: "请输入捐款月份",
+      },
+      ],
+    }
+  },
+  {
+    title: '捐款金额(元)',
+    dataIndex: 'money',
+    valueType: 'money',
+    formItemProps: {
+      initialValue: 0,
+        rules: [{
+          required: true,
+          message: "请输入捐款金额",
+        },
+      ],
+    }
+  },
+  {
+    title: '捐款物资(数量)',
+    hideInSearch: true,
+    dataIndex: 'goods',
+    valueType: 'text',
+  },
+  {
+    title: '捐献年份',
+    hideInSearch: true,
+    hideInForm: true,
+    dataIndex: 'year',
+    valueType: 'text',
+  },
 ]
 
 

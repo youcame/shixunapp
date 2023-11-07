@@ -18,7 +18,7 @@ const CreateModal: React.FC<Props> = (props) => {
       <div style={{ marginLeft: "20px", marginRight: "10px"}}>
         {file ? (
           <Form requiredMark={true}>
-            上传附件:&nbsp;<MyUploadFile />
+            上传附件:&nbsp;&nbsp;&nbsp;&nbsp;<MyUploadFile />
           </Form>
         ) : null}
       </div>

@@ -1,7 +1,7 @@
 import {LikeOutlined, MessageOutlined, PlusOutlined, StarOutlined} from '@ant-design/icons';
 import React, {useEffect, useState} from 'react';
 import {Avatar, Button, List, message, Space} from 'antd';
-import {PageContainer, ProColumns} from "@ant-design/pro-components";
+import {PageContainer, ProColumns, ProList} from "@ant-design/pro-components";
 import {PAGESIZE} from "@/constant";
 import CreateModal from "@/components/Modals/CreateModal";
 import {addPostUsingPOST, listPostVOByPageUsingPOST} from "@/services/shixunapp/postController";
@@ -110,7 +110,7 @@ const News: React.FC = () => {
   };
   return(
     <PageContainer>
-      <List
+      <ProList
         itemLayout="vertical"
         size="large"
         pagination={{
@@ -121,16 +121,31 @@ const News: React.FC = () => {
           },
         }}
         dataSource={formValue}
-        footer={
-          <Button
-            type={"primary"}
-            onClick={() => {
-              handleModalOpen(true);
-            }}
-          >
-            <PlusOutlined />发布新闻
-          </Button>
-        }
+        // footer={
+        //   <Button
+        //     type={"primary"}
+        //     onClick={() => {
+        //       handleModalOpen(true);
+        //     }}
+        //   >
+        //     <PlusOutlined />发布新闻
+        //   </Button>
+        // }
+        toolBarRender={
+          ()=> {
+            return [
+              <Button
+                key="sub"
+                type={"primary"}
+                onClick={() => {
+                  handleModalOpen(true);
+                }}
+              >
+                <PlusOutlined/>发布新闻
+              </Button>];
+          }
+      }
+
         renderItem={(item) => (
           <List.Item
             key={item.title}

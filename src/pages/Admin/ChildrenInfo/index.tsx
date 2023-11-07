@@ -247,7 +247,6 @@ const ChildrenInfo: React.FC = () => {
         columns={columns}
         rowSelection={{
           onChange: () => {
-
           },
         }}
       />

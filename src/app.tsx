@@ -9,6 +9,7 @@ import { AvatarDropdown, AvatarName } from './components/RightContent/AvatarDrop
 import { getLoginUserUsingGET } from '@/services/shixunapp/userController';
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
+const WHITE_LIST = ['/user/register',loginPath,'/welcome'];
 
 /**
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
@@ -46,7 +47,10 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     onPageChange: () => {
       const { location } = history;
       // 如果没有登录，重定向到 login
-      if (!initialState?.loginUser && location.pathname !== loginPath) {
+      if(WHITE_LIST.includes(location.pathname)){
+        return;
+      }
+      if (!initialState?.loginUser) {
         history.push(loginPath);
       }
     },
