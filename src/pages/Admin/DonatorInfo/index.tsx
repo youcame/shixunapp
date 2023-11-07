@@ -243,7 +243,7 @@ const DonateInfo: React.FC = () => {
           />
         )}
       </Drawer>
-      <CreateModal columns={columns} onCancel={()=>{handleModalOpen(false)}} onSubmit={async (values:API.UserVO)=>{handleAdd(values)}} visible={createModalOpen}/>
+      <CreateModal columns={columns} onCancel={()=>{handleModalOpen(false)}} onSubmit={async (values:API.UserVO)=>{handleAdd(values)}} visible={createModalOpen} file={true}/>
     </PageContainer>
   );
 };

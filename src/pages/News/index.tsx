@@ -13,7 +13,7 @@ const IconText = ({ icon, text }: { icon: React.FC; text: string }) => (
   </Space>
 );
 
-const App: React.FC = () => {
+const News: React.FC = () => {
 
   const [formValue,setFormValue] = useState<API.PostVO[]>();
   const [total,setTotal] = useState<number>(0)
@@ -161,4 +161,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default News;

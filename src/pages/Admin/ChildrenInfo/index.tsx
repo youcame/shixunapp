@@ -163,6 +163,7 @@ const ChildrenInfo: React.FC = () => {
           key="task"
           onClick={() => {
             // @ts-ignore
+            setCurrentRow(record);
             handleTaskModalOpen(true);
           }}
         >
@@ -287,8 +288,8 @@ const ChildrenInfo: React.FC = () => {
           />
         )}
       </Drawer>
-      <CreateModal columns={columns} onCancel={()=>{handleModalOpen(false)}} onSubmit={async (values:API.UserVO)=>{handleAdd(values)}} visible={createModalOpen}/>
-      <CreateModal columns={TASKCOLUMN} onCancel={()=>{handleTaskModalOpen(false)}} onSubmit={async (values:API.TaskVO)=>{handleTaskAdd(values)}} visible={createTaskModalOpen} file={true}/>
+      <CreateModal columns={columns} onCancel={()=>{handleModalOpen(false)}} onSubmit={async (values:API.UserVO)=>{await handleAdd(values)}} visible={createModalOpen} file={true}/>
+      <CreateModal columns={TASKCOLUMN} onCancel={()=>{handleTaskModalOpen(false)}} onSubmit={async (values:API.TaskVO)=>{await handleTaskAdd(values)}} visible={createTaskModalOpen} file={true}/>
     </PageContainer>
   );
 };

@@ -127,6 +127,35 @@ export const USERCOLUMN : ProColumns<API.UserVO>[] = [
   }
 ]
 
+export const DONATECOLUMN : ProColumns<API.UserDonateVO>[] = [
+  {
+    title: 'id',
+    dataIndex: 'id',
+    valueType: 'index',
+  },
+  {
+    title: '捐款金额',
+    dataIndex: 'donateMoney',
+    valueType: 'money',
+    formItemProps: {
+      initialValue: 0,
+      rules: [{
+        required: true,
+        message: "请输入捐款金额",
+      },
+      ],
+
+    }
+  },
+  {
+    title: '捐款物资',
+    hideInTable:true,
+    hideInSearch: true,
+    dataIndex: 'donateThing',
+    valueType: 'text',
+  },
+]
+
 
 
 

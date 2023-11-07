@@ -4,7 +4,7 @@ import {
 import '@umijs/max';
 import {useEffect, useState} from "react";
 import {useLocation} from "umi";
-import {Avatar, Button, Card, Divider, List, message, Typography} from "antd";
+import {Avatar, Button, Card, Divider, Image, List, message, Typography} from "antd";
 import {
   deleteTaskUsingPOST,
   finishTaskByIdUsingPOST,
@@ -28,7 +28,7 @@ const TaskRecord: React.FC = () => {
     const hide = message.loading('正在删除');
     if (!id) return true;
     try {
-      const res = await deleteTaskUsingPOST({
+      await deleteTaskUsingPOST({
         id: id,
       });
       await getTaskInfo();
@@ -46,7 +46,7 @@ const TaskRecord: React.FC = () => {
     const hide = message.loading('正在执行');
     if (!id) return true;
     try {
-      const res = await finishTaskByIdUsingPOST({
+      await finishTaskByIdUsingPOST({
         id: id,
       })
       await getTaskInfo();
@@ -73,7 +73,7 @@ const TaskRecord: React.FC = () => {
         <List
           itemLayout="horizontal"
           dataSource={formValue}
-          renderItem={(item, index) => item?(
+          renderItem={(item) => item?(
             <>
               <List.Item>
                 <List.Item.Meta
@@ -87,7 +87,10 @@ const TaskRecord: React.FC = () => {
 
                   {item?.isFinished===0 ? (
                     <div>
-                      <Button type={"link"} key={"finish"} onClick={()=>{handleFinish(item?.id)}}>
+
+                      <Image src={"https://hzh-1318734603.cos.ap-shanghai.myqcloud.com/%E4%BB%BB%E5%8A%A1.png"} width={100}/>
+                      <Divider type={"vertical"}/>
+                      <Button type={"link"} key={"finish"} onClick={()=>{handleFinish(item?.id ? item?.id : 0)}}>
                         完成
                       </Button>
                       <Divider type={"vertical"}/>
@@ -96,7 +99,7 @@ const TaskRecord: React.FC = () => {
                         key={"delete"}
                         danger
                         onClick={()=> {
-                        handleRemove(item?.id)
+                        handleRemove(item?.id ? item?.id : 0)
                       }}
                         >
                         放弃
@@ -110,7 +113,7 @@ const TaskRecord: React.FC = () => {
                         type={"link"}
                         key={"delete"}
                         onClick={()=> {
-                          handleRemove(item?.id)
+                          handleRemove(item?.id ? item?.id : 0)
                         }}
                       >
                         已读

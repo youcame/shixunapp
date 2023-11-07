@@ -4,7 +4,7 @@ import { request } from '@umijs/max';
 
 /** addUserDonate POST /api/userDonate/add */
 export async function addUserDonateUsingPOST(
-  body: API.UserDonateVO,
+  body: API.DonateAddRequest,
   options?: { [key: string]: any },
 ) {
   return request<API.BaseResponseInt_>('/api/userDonate/add', {

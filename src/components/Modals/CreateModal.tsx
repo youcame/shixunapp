@@ -1,6 +1,6 @@
 import '@umijs/max';
 import React from 'react';
-import {Button, Modal} from "antd";
+import {Form,Modal} from "antd";
 import {ProColumns, ProTable} from "@ant-design/pro-table/lib";
 import MyUploadFile from "@/components/UploadFile";
 export type Props = {
@@ -17,9 +17,9 @@ const CreateModal: React.FC<Props> = (props) => {
     <Modal open={visible} onCancel={()=> onCancel?.()} footer={null}>
       <div style={{ marginLeft: "20px", marginRight: "10px"}}>
         {file ? (
-          <div>
-            上传附件:  <MyUploadFile />
-          </div>
+          <Form requiredMark={true}>
+            上传附件:&nbsp;<MyUploadFile />
+          </Form>
         ) : null}
       </div>
       <br/>

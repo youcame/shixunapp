@@ -21,6 +21,7 @@ const RegisterMessage: React.FC<{
   />
 );
 
+
 const Register: React.FC = () => {
   const [type, setType] = useState<string>('account');
   const containerClassName = useEmotionCss(() => {
@@ -34,6 +35,7 @@ const Register: React.FC = () => {
       backgroundSize: '100% 100%',
     };
   });
+
   //提交表单
   const handleSubmit = async (values: API.UserRegisterRequest) => {
     //验证
@@ -50,7 +52,7 @@ const Register: React.FC = () => {
         const defaultRegisterSuccessMessage = '注册成功！';
         message.success(defaultRegisterSuccessMessage);
         //原本为“redirect || '/'”
-        history.push('/login');
+        history.push('/user/login');
         return;
       }else{
         throw new Error(`register error id = ${res?.data}`);
@@ -81,8 +83,8 @@ const Register: React.FC = () => {
             await handleSubmit(values as API.UserRegisterRequest);
           }}
         >
-          <Tabs activeKey={type} onChange={setType}>
-            <Tabs.TabPane key="account" tab={'用户注册页面'} />
+          <Tabs activeKey={type} onChange={setType} centered>
+            <Tabs.TabPane key="account" tab={'用户注册页面'} style={{justifyContent: "center"}}/>
           </Tabs>
 
           {status === 'error' && (

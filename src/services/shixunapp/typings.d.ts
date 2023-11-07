@@ -87,6 +87,13 @@ declare namespace API {
     id?: number;
   };
 
+  type DonateAddRequest = {
+    donateMoney?: number;
+    donateThing?: string;
+    donateUserId?: number;
+    receiveUserId?: number;
+  };
+
   type finishTaskByIdUsingPOSTParams = {
     /** id */
     id?: number;
@@ -271,6 +278,7 @@ declare namespace API {
   };
 
   type UserAddRequest = {
+    detailProfile?: string;
     userAccount?: string;
     userAvatar?: string;
     userName?: string;
