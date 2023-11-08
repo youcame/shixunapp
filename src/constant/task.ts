@@ -19,6 +19,17 @@ export const taskColumn: ProColumns<API.TaskVO>[] = [
     }
   },
   {
+    title: '任务难度',
+    dataIndex: 'title',
+    valueType: 'text',
+    formItemProps: {
+      rules: [{
+        required: true,
+        message: "请输入任务名称",
+      }]
+    }
+  },
+  {
     title: '任务内容',
     hideInTable: true,
     hideInSearch: true,

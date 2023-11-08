@@ -37,7 +37,7 @@ const MyRadar = () => {
     appendPadding: [0, 10, 0, 10],
     meta: {
       star: {
-        alias: 'star 数量',
+        alias: '相对比例',
         min: 0,
         nice: true,
         formatter: (v: any) => Number(v).toFixed(2),

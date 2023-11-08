@@ -22,6 +22,17 @@ export const TASKCOLUMN : ProColumns<API.TaskVO>[] = [
     }
   },
   {
+    title: '任务难度',
+    dataIndex: '123',
+    valueType: 'text',
+    formItemProps: {
+      rules: [{
+        required: true,
+        message: "请输入任务难度",
+      }]
+    }
+  },
+  {
     title: '任务内容',
     hideInTable:true,
     hideInSearch: true,
@@ -146,20 +157,6 @@ export const DONATECOLUMN : ProColumns<API.UserDonateVO>[] = [
       ],
 
     }
-  },
-  {
-    title: '捐款物资',
-    hideInTable:true,
-    hideInSearch: true,
-    dataIndex: 'donateThing',
-    valueType: 'text',
-  },
-  {
-    title: '捐款物资',
-    hideInTable:true,
-    hideInSearch: true,
-    dataIndex: 'donateThing',
-    valueType: 'text',
   },
   {
     title: '捐款物资',

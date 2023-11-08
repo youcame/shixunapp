@@ -120,6 +120,30 @@ export default () => {
                   <span>2023年{renderBadge(11, activeKey === 'tab1')}</span>
                 ),
               },
+              {
+                key: '2022',
+                label: (
+                  <span>2022年{renderBadge(12, activeKey === 'tab2')}</span>
+                ),
+              },
+              {
+                key: '2021',
+                label: (
+                  <span>2021年{renderBadge(12, activeKey === 'tab3')}</span>
+                ),
+              },
+              {
+                key: '2020',
+                label: (
+                  <span>2020年{renderBadge(12, activeKey === 'tab4')}</span>
+                ),
+              },
+              {
+                key: '2019',
+                label: (
+                  <span>2019年{renderBadge(12, activeKey === 'tab5')}</span>
+                ),
+              },
               // {
               //   key: '2022',
               //   label: (
